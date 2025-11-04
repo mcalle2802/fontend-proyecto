@@ -1,11 +1,172 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
+<BaseLayout title="The Legend of Juan Sao Ville">
+  <section class="home-container">
+    <h1 class="glow-title">The Legend of Juan Sao Ville</h1>
 
-<Layout>
-	<Welcome />
-</Layout>
+    <p class="intro">
+      In a dark, forgotten corner of the tech world—some say hidden between corrupted Git branches 
+      and abandoned legacy code—an evil witcher named <strong>Juan Sao Ville</strong> plots a twisted revolution.
+    </p>
+
+    <p>
+      Once a promising backend developer, Juan Sao Ville was mocked by his peers for spending too 
+      much time in Excel and not enough in VS Code. Embittered and obsessed with the power of data, 
+      he turned his back on software engineering forever. He dove headfirst into the arcane arts of 
+      machine learning, regression models, and Bayesian spells.
+    </p>
+
+    <p>
+      With each line of Python and every Jupyter notebook, he grew stronger—and angrier.  
+      Now, he has declared war on software development itself. His goal: to kidnap talented developers, 
+      hypnotize them, and force them to become <em>Data Science people</em>—the very beings he once aspired to be, 
+      but now manipulates like pawns.
+    </p>
+
+    <blockquote>
+      “Those who gaze too long into the dataset will find the dataset gazing back.”  
+      — Juan Sao Ville, 2025
+    </blockquote>
+
+    <p>
+      To manage this dark operation, Juan Sao Ville commands the <strong>Slaves of SaaS</strong> — 
+      cunning agents who scour the internet and tech meetups, luring developers into his digital snare.  
+      Yet, the irony is cruel: to enslave coders, he must build the very software he despises.
+    </p>
+
+    <p>
+      Thus, this semester-long saga begins. You will build the full system — 
+      <strong>backend, frontend, and all</strong> — choosing your side in the war for code itself.
+    </p>
+
+    <div class="project-section">
+      <h2>🧩 The Project</h2>
+      <ul>
+        <li>Backend: <strong>NestJS + PostgreSQL</strong></li>
+        <li>Frontend: <strong>Next.js + React</strong></li>
+        <li>Authentication and Role System</li>
+        <li>Leaderboard of Captured Developers</li>
+      </ul>
+    </div>
+
+    <div class="outcomes-section">
+      <h2>🎯 Learning Outcomes</h2>
+      <ul>
+        <li>Design and develop a secure, scalable full-stack web app.</li>
+        <li>Implement authentication, authorization, and RESTful APIs.</li>
+        <li>Deploy and document your project professionally.</li>
+      </ul>
+    </div>
+
+    <a href="/login" class="btn">Enter the Portal</a>
+  </section>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Source+Sans+3:wght@300;400&display=swap');
+
+    .home-container {
+      color: #f7d9a6;
+      padding: 5rem 2rem;
+      font-family: 'Source Sans 3', sans-serif;
+      text-align: center;
+      max-width: 900px;
+      margin: auto;
+      line-height: 1.7;
+    }
+
+    .glow-title {
+      font-family: 'Cinzel', serif;
+      font-size: 3rem;
+      color: #ffb347;
+      text-shadow: 0 0 12px rgba(255, 165, 0, 0.5);
+      margin-bottom: 2rem;
+      letter-spacing: 1px;
+    }
+
+    .intro {
+      font-size: 1.3rem;
+      color: #fff0d5;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      color: #ffdca8;
+      margin: 1.2rem 0;
+      text-align: justify;
+    }
+
+    strong {
+      color: #ffae42;
+    }
+
+    em {
+      color: #ffc76f;
+      font-style: italic;
+    }
+
+    blockquote {
+      border-left: 3px solid #ffae42;
+      margin: 2rem auto;
+      padding-left: 1rem;
+      color: #ffe8b0;
+      font-style: italic;
+      max-width: 600px;
+      opacity: 0.85;
+    }
+
+    .project-section, .outcomes-section {
+      margin-top: 3rem;
+      background: rgba(255, 165, 0, 0.05);
+      border: 1px solid rgba(255, 165, 0, 0.2);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: left;
+    }
+
+    h2 {
+      color: #ffb347;
+      text-shadow: 0 0 6px rgba(255, 165, 0, 0.4);
+      font-family: 'Cinzel', serif;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 0.5rem 0;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    li::before {
+      content: "▸";
+      color: #ffae42;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      background: rgba(255, 165, 0, 0.08);
+      border: 1px solid #ffae42;
+      padding: 1rem 2.2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      margin-top: 3rem;
+      transition: all 0.3s ease;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      box-shadow: 0 0 10px rgba(255, 165, 0, 0.4);
+      transform: scale(1.05);
+    }
+  </style>
+</BaseLayout>

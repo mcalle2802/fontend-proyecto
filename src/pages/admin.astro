@@ -1,0 +1,102 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Admin - My Juan Sao">
+  <section class="admin-container">
+    <h1>Oracle's Chamber</h1>
+    <p>
+      From this sacred place, you can oversee, guide, and alter the fate of every wandering soul.
+    </p>
+
+    <div class="admin-actions">
+      <button class="btn">View Reports</button>
+      <button class="btn">Manage Users</button>
+      <button class="btn danger">Reset the Cycle</button>
+    </div>
+  </section>
+
+  <style>
+    .admin-container {
+      text-align: center;
+      color: #ffae42;
+      padding: 5rem 2rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      text-shadow: 0 0 10px rgba(255, 170, 60, 0.7);
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      color: #ffe2b3;
+      margin-bottom: 3rem;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      font-size: 1.1rem;
+    }
+
+    .admin-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 1.8rem;
+      color: #ffae42;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+    }
+
+    .btn.danger {
+      border-color: #ff6666;
+      color: #ff6666;
+    }
+
+    .btn.danger:hover {
+      background: rgba(255, 60, 60, 0.3);
+      box-shadow: 0 0 18px rgba(255, 60, 60, 0.4);
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("token");
+      const userRole = localStorage.getItem("userRole");
+
+      // Si no hay token → redirigir al login
+      if (!token) {
+        alert("Access denied. Please sign in first.");
+        window.location.href = "/login";
+        return;
+      }
+
+      // Si no hay rol o el rol no es admin/master → redirigir al inicio
+      if (!userRole || (userRole !== "admin" && userRole !== "master")) {
+        alert("⛔ You don't have permission to access the Oracle's Chamber.");
+        window.location.href = "/";
+        return;
+      }
+
+      console.log("✅ Access granted to Admin Panel:", userRole);
+    });
+  </script>
+</BaseLayout>

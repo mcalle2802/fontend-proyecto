@@ -1,0 +1,90 @@
+---
+---
+<nav id="mainNav" style="
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem 0;
+  background: rgba(15, 10, 30, 0.7);
+  border-bottom: 1px solid #5a3b9d;
+  box-shadow: 0 0 15px rgba(130, 80, 200, 0.3);
+">
+  <a href="/" style="
+    color: #ffb366;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(255, 150, 50, 0.6);
+    transition: all 0.3s ease;
+  ">Inicio</a>
+
+  <a href="/login" style="
+    color: #ffb366;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(255, 150, 50, 0.6);
+    transition: all 0.3s ease;
+  " id="loginLink">Login</a>
+
+  <a href="/admin" style="
+    color: #ffb366;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(255, 150, 50, 0.6);
+    transition: all 0.3s ease;
+    display: none;
+  " id="adminLink">Admin</a>
+
+  <a href="/slave" style="
+    color: #ffb366;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(255, 150, 50, 0.6);
+    transition: all 0.3s ease;
+    display: none;
+  " id="slaveLink">Slave</a>
+
+  <a href="/developer" style="
+    color: #ffb366;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 0 6px rgba(255, 150, 50, 0.6);
+    transition: all 0.3s ease;
+    display: none;
+  " id="devLink">Resistencia</a>
+</nav>
+
+<style>
+  nav a:hover {
+    color: #ff7b00;
+    text-shadow: 0 0 10px rgba(255, 120, 0, 0.9);
+    transform: scale(1.05);
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
+
+    const adminLink = document.getElementById("adminLink");
+    const slaveLink = document.getElementById("slaveLink");
+    const devLink = document.getElementById("devLink");
+    const loginLink = document.getElementById("loginLink");
+
+    if (isLoggedIn) {
+      adminLink.style.display = "inline";
+      slaveLink.style.display = "inline";
+      devLink.style.display = "inline";
+      loginLink.style.display = "none";
+    } else {
+      adminLink.style.display = "none";
+      slaveLink.style.display = "none";
+      devLink.style.display = "none";
+      loginLink.style.display = "inline";
+    }
+  });
+</script>

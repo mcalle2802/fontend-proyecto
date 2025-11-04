@@ -1,0 +1,107 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+const { title } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{title || "Juan Sao Ville’s Domain"}</title>
+
+    <!-- 🎃 Google Font estilo Pumpkin -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik+Dirt&display=swap" rel="stylesheet" />
+
+    <style>
+      :root {
+        --pumpkin-orange: #ff7b00;
+        --pumpkin-light: #ffb347;
+        --pumpkin-dark: #2b1b0f;
+        --pumpkin-shadow: rgba(255, 123, 0, 0.25);
+        --text-color: #ffe7c1;
+        --font-title: 'Rubik Dirt', cursive;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-title);
+        background: radial-gradient(circle at 30% 20%, #1a0f08 0%, #080402 100%);
+        background-attachment: fixed;
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        text-shadow: 0 0 8px var(--pumpkin-shadow);
+      }
+
+      main {
+        flex: 1;
+        padding: 3rem 10%;
+        background: rgba(15, 8, 2, 0.6);
+        border: 2px solid var(--pumpkin-orange);
+        border-radius: 16px;
+        box-shadow: 0 0 30px var(--pumpkin-shadow);
+        margin: 2rem auto;
+        width: 80%;
+      }
+
+      h1, h2, h3 {
+        font-family: var(--font-title);
+        color: var(--pumpkin-light);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-shadow: 0 0 15px rgba(255, 150, 50, 0.5);
+      }
+
+      a {
+        color: var(--pumpkin-light);
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      a:hover {
+        color: var(--pumpkin-orange);
+        text-shadow: 0 0 10px var(--pumpkin-orange);
+      }
+
+      button, input, select {
+        background: rgba(45, 25, 10, 0.9);
+        border: 2px solid var(--pumpkin-light);
+        color: var(--text-color);
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+        font-family: var(--font-title);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: var(--pumpkin-orange);
+        color: #1a0f08;
+        box-shadow: 0 0 15px var(--pumpkin-light);
+        cursor: pointer;
+      }
+
+      header, footer {
+        background: linear-gradient(90deg, #1a0f08, #2b1b0f);
+        color: var(--pumpkin-light);
+        text-align: center;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px var(--pumpkin-shadow);
+      }
+
+      footer {
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 165, 0, 0.2);
+      }
+    </style>
+  </head>
+
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+  </body>
+</html>
