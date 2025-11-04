@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-
 <BaseLayout title="Access to Juan Sao Ville's Domain">
   <section
     style="
@@ -51,10 +50,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         "
       ></div>
 
-      <form
-        id="loginForm"
-        style="display: flex; flex-direction: column; gap: 1rem;"
-      >
+      <form id="loginForm" style="display: flex; flex-direction: column; gap: 1rem;">
         <input
           type="email"
           name="email"
@@ -105,7 +101,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         >
           <span id="btnText">Enter</span>
           <span id="btnLoader" style="display: none;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite;">
               <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
               <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="0.75"/>
             </svg>
@@ -121,7 +117,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255, 150, 50, 0.8);
   }
-  
+
   button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -141,15 +137,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <script>
   const API_URL = "http://localhost:3000/auth/login";
 
-  // Función para decodificar el JWT
-  function parseJwt(token: string) {
+  function parseJwt(token) {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
         atob(base64)
           .split('')
-          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          })
           .join('')
       );
       return JSON.parse(jsonPayload);
@@ -159,8 +156,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 
-  // Función para mostrar errores
-  function showError(message: string) {
+  function showError(message) {
     const errorDiv = document.getElementById("errorMessage");
     if (errorDiv) {
       errorDiv.textContent = message;
@@ -168,7 +164,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 
-  // Función para ocultar errores
   function hideError() {
     const errorDiv = document.getElementById("errorMessage");
     if (errorDiv) {
@@ -176,9 +171,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   }
 
-  // Función para manejar el estado de carga
-  function setLoading(loading: boolean) {
-    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
+  function setLoading(loading) {
+    const submitBtn = document.getElementById("submitBtn");
     const btnText = document.getElementById("btnText");
     const btnLoader = document.getElementById("btnLoader");
 
@@ -187,86 +181,121 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     if (btnLoader) btnLoader.style.display = loading ? "inline" : "none";
   }
 
-  // Manejar el submit del formulario
-  document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("loginForm") as HTMLFormElement;
+  // Normalizar extracción de rol (maneja string, array, o ubicaciones en response)
+  function resolveRoleFromResponse(data, payload) {
+    // 1) intentar extraer rol directamente desde la respuesta del API
+    const apiPaths = [
+      () => (data && data.role),
+      () => (data && data.roles),
+      () => (data && data.data && data.data.role),
+      () => (data && data.data && data.data.roles),
+      () => (data && data.user && data.user.role),
+      () => (data && data.user && data.user.roles),
+      () => (data && data.data && data.data.user && data.data.user.role),
+      () => (data && data.data && data.data.user && data.data.user.roles)
+    ];
 
-    loginForm.addEventListener("submit", async (e) => {
+    for (const get of apiPaths) {
+      const v = get();
+      if (v) {
+        if (Array.isArray(v) && v.length) return String(v[0]);
+        if (typeof v === 'string') return v;
+      }
+    }
+
+    // 2) si no hay en la respuesta, intentar del payload del token
+    if (payload) {
+      const p = payload.roles ?? payload.role ?? payload.user?.roles ?? payload.user?.role;
+      if (Array.isArray(p) && p.length) return String(p[0]);
+      if (typeof p === 'string') return p;
+    }
+
+    // 3) fallback
+    return 'user';
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const loginForm = document.getElementById("loginForm");
+    if (!loginForm) return;
+
+    loginForm.addEventListener("submit", async function (e) {
       e.preventDefault();
       hideError();
       setLoading(true);
 
       const formData = new FormData(loginForm);
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
+      const email = formData.get("email");
+      const password = formData.get("password");
+
+      console.log("FORM SUBMIT ATTEMPT:", { email, passwordPresent: !!password });
 
       try {
         const res = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+          credentials: "include",
+          body: JSON.stringify({ email, password })
         });
 
-        const data = await res.json();
+        console.log("DEBUG response status:", res.status);
+        for (const [k, v] of res.headers.entries()) console.log("DEBUG header:", k, v);
 
-        // Manejo de errores específicos
+        // Leer texto crudo y parsear de forma segura
+        const rawText = await res.text();
+        let data = null;
+        try { data = rawText ? JSON.parse(rawText) : null; } catch (err) {
+          console.warn("Failed to parse JSON response:", err, "raw:", rawText);
+        }
+        console.log("DEBUG parsed response object:", data);
+
         if (!res.ok) {
           if (res.status === 401) {
-            showError("❌ Invalid password. Please check and try again.");
+            showError("❌ Invalid credentials. Please check and try again.");
           } else if (res.status === 404) {
             showError("❌ Email not found. Please verify your email or register.");
           } else if (res.status === 400) {
             showError("❌ Please provide both email and password.");
           } else {
-            showError(data.message || "❌ Login failed. Please try again.");
+            showError((data && (data.message || data.error)) || "❌ Login failed. Please try again.");
           }
           setLoading(false);
           return;
         }
 
-        // Login exitoso
-        const token = data.token;
+        // Identificar token y user según la forma de tu API
+        const token =
+          (data && (data.token || data.data?.token || data.data?.data?.token)) ||
+          null;
 
-        if (!token) {
-          showError("❌ Invalid response from server. Please try again.");
-          setLoading(false);
-          return;
-        }
+        const userObj =
+          (data && (data.user || data.data?.user || data.data?.data?.user)) ||
+          null;
 
-        // Decodificar el token para obtener la información del usuario
-        const payload = parseJwt(token);
+        console.log("DEBUG user object from response:", userObj);
+        console.log("DEBUG token from response:", token);
 
-        if (!payload) {
-          showError("❌ Invalid token format. Please contact support.");
-          setLoading(false);
-          return;
-        }
+        const payload = token ? parseJwt(token) : null;
+        console.log("DEBUG jwt payload:", payload);
 
-        // Guardar información en localStorage
-        localStorage.setItem("token", token);
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userName", payload.name || "User");
-        
-        // Obtener el rol (el primer rol del array)
-        const userRole = payload.roles && payload.roles.length > 0 
-          ? payload.roles[0] 
-          : "slave";
-        
+        // Resolver rol y normalizar
+        const userRole = resolveRoleFromResponse(data, payload);
+        console.log("Resolved userRole:", userRole);
+
+        // Guardar info para UI (no almacenar secretos)
+        if (token) localStorage.setItem("token", token);
+        if (userObj && userObj.email) localStorage.setItem("userEmail", userObj.email);
         localStorage.setItem("userRole", userRole);
+        localStorage.setItem("userName", (userObj && (userObj.name || userObj.username)) || payload?.name || "User");
 
-        console.log("Login successful:", {
-          name: payload.name,
-          email: payload.email,
-          role: userRole
-        });
-
-        // Redirigir según el rol
-        if (userRole === "slave") {
-          // Si es slave, redirigir a la página de resistance
-          window.location.href = "/resistance";
+        // Redirigir según rol (ajusta si tu backend usa otros nombres)
+        if (['master'].includes(userRole)) {
+          window.location.href = '/admin';
+        } else if (['slave'].includes(userRole)) {
+          window.location.href = '/slave';
+        } else if (['developer'].includes(userRole)) {
+          window.location.href = '/developer';
         } else {
-          // Si es otro rol (admin, etc.), redirigir a admin
-          window.location.href = "/admin";
+          window.location.href = '/';
         }
 
       } catch (error) {

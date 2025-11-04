@@ -10,4 +10,17 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <li>No abras correos con asuntos que digan “¡Aprende Machine Learning YA!”.</li>
     <li>Recuerda: el frontend también es arte.</li>
   </ul>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("userRole");
+      const allowedRoles = ["developer"];
+
+      if (!allowedRoles.includes(role)) {
+        alert("⚠️ Access denied. Only resistance members may enter this domain.");
+        window.location.href = "/login";
+      }
+    });
+  </script>
+
 </BaseLayout>

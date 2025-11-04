@@ -16,6 +16,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </div>
   </section>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("userRole");
+      const allowedRoles = ["master"];
+
+      if (!allowedRoles.includes(role)) {
+        alert("⚠️ Access denied. Only resistance members may enter this domain.");
+        window.location.href = "/login";
+      }
+    });
+  </script>
+
   <style>
     .admin-container {
       text-align: center;
@@ -76,27 +88,4 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       box-shadow: 0 0 18px rgba(255, 60, 60, 0.4);
     }
   </style>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const token = localStorage.getItem("token");
-      const userRole = localStorage.getItem("userRole");
-
-      // Si no hay token → redirigir al login
-      if (!token) {
-        alert("Access denied. Please sign in first.");
-        window.location.href = "/login";
-        return;
-      }
-
-      // Si no hay rol o el rol no es admin/master → redirigir al inicio
-      if (!userRole || (userRole !== "admin" && userRole !== "master")) {
-        alert("⛔ You don't have permission to access the Oracle's Chamber.");
-        window.location.href = "/";
-        return;
-      }
-
-      console.log("✅ Access granted to Admin Panel:", userRole);
-    });
-  </script>
 </BaseLayout>
