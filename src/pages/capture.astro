@@ -1,0 +1,127 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Resistance - Capture Form">
+  <section class="capture-container">
+    <h1>🕵️ Capture Form</h1>
+    <p>Log the details of those who have fallen into the shadows...</p>
+
+    <form id="captureForm">
+      <input type="text" name="name" placeholder="Victim Name" required />
+      <input type="text" name="skills" placeholder="Known Skills" required />
+      <input type="text" name="lastSeen" placeholder="Last Seen Location" required />
+      <select name="status" required>
+        <option value="">Transformation Status</option>
+        <option value="Unchanged">Unchanged</option>
+        <option value="Infected - 25%">Infected - 25%</option>
+        <option value="Infected - 50%">Infected - 50%</option>
+        <option value="Infected - 75%">Infected - 75%</option>
+        <option value="Converted">Converted</option>
+      </select>
+      <button type="submit">Capture</button> 
+    </form>
+    
+    <div class="back-action">
+      <a href="/slave" class="btn">Back to Resistance Hub</a>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("userRole");
+      if (role !== "slave") {
+        alert("Access denied. Only Resistance Slaves may capture victims.");
+        window.location.href = "/login";
+      }
+
+      const form = document.getElementById("captureForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(form).entries());
+
+        try {
+          const res = await fetch("http://localhost:3000/victims", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify(formData),
+          });
+
+          if (res.ok) {
+            alert("Victim successfully captured!");
+            form.reset();
+          } else {
+            alert("Failed to capture victim.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Connection error.");
+        }
+      });
+    });
+  </script>
+
+  <style>
+    .capture-container {
+      text-align: center;
+      color: #ffae42;
+      padding: 3rem 1rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+
+    input, select {
+      padding: 0.8rem;
+      border: 1px solid #ffae42;
+      border-radius: 8px;
+      background: rgba(255, 165, 0, 0.1);
+      color: #ffae42;
+    }
+
+    button {
+      background: rgba(255, 165, 0, 0.2);
+      border: 1px solid #ffae42;
+      padding: 0.8rem;
+      border-radius: 8px;
+      color: #ffae42;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: rgba(255, 165, 0, 0.4);
+      transform: scale(1.05);
+    }
+
+    .back-action {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      transition: background 0.3s, transform 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+    }
+  </style>
+</BaseLayout>

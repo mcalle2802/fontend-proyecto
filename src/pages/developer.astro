@@ -2,14 +2,18 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Resistencia de Desarrolladores">
-  <h2>💻 Developer Resistance</h2>
-  <p>Consejos para mantenerte a salvo de Juan Sao Ville y sus Slaves.</p>
-  <ul>
-    <li>Evita commits después de medianoche.</li>
-    <li>No abras correos con asuntos que digan “¡Aprende Machine Learning YA!”.</li>
-    <li>Recuerda: el frontend también es arte.</li>
-  </ul>
+<BaseLayout title="Developer Resistance - My Juan Sao">
+  <section class="developer-container">
+    <h1>Developer Resistance Page</h1>
+    <p>
+      Welcome to the sanctuary of code warriors. Here you'll find the tools to survive and thrive in the digital realm.
+    </p>
+
+    <div class="actions">
+      <a href="/tips" class="btn">Open-access Tips Page</a>
+      <a href="/feedback" class="btn">Feedback Form</a>
+    </div>
+  </section>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -17,10 +21,56 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       const allowedRoles = ["developer"];
 
       if (!allowedRoles.includes(role)) {
-        alert("⚠️ Access denied. Only resistance members may enter this domain.");
+        alert("⚠️ Access denied. Only developers may enter this sanctuary.");
         window.location.href = "/login";
       }
     });
   </script>
 
+  <style>
+    .developer-container {
+      text-align: center;
+      color: #ffae42;
+      padding: 5rem 2rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 6px rgba(255, 165, 0, 0.7);
+    }
+
+    p {
+      color: #ffe0b0;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      transition: background 0.3s, transform 0.2s;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 165, 0, 0.3);
+    }
+  </style>
 </BaseLayout>

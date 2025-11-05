@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Oracle - Slave Leaderboard">
+  <section class="leaderboard-section">
+    <h1>🏆 Slave Leaderboard</h1>
+    <p>The ranking of your loyal servants, by number of captures.</p>
+
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Victims Captured</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <tr><td colspan="3">Loading data...</td></tr>
+      </tbody>
+    </table>
+    
+    <div class="back-action">
+      <a href="/admin" class="btn">Back to Oracle's Chamber</a>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const role = localStorage.getItem("userRole");
+      if (role !== "master") {
+        alert("Access denied. Only the Oracle may view this.");
+        window.location.href = "/login";
+        return;
+      }
+
+      const tbody = document.getElementById("leaderboardBody");
+
+      try {
+        const res = await fetch("http://localhost:3000/leaderboard", {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch leaderboard");
+        const data = await res.json();
+
+        tbody.innerHTML = data.map((user, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${user.name}</td>
+            <td>${user.captures}</td>
+          </tr>
+        `).join("");
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = "<tr><td colspan='3'>⚠️ Error loading leaderboard.</td></tr>";
+      }
+    });
+  </script>
+
+  <style>
+    .leaderboard-section {
+      text-align: center;
+      color: #ffae42;
+      padding: 3rem 1rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    table {
+      width: 80%;
+      margin: 2rem auto;
+      border-collapse: collapse;
+      color: #ffe0b0;
+    }
+
+    th, td {
+      border: 1px solid #ffae42;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    th {
+      background: rgba(255, 165, 0, 0.2);
+    }
+
+    tr:hover {
+      background: rgba(255, 165, 0, 0.1);
+    }
+
+    .back-action {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      transition: background 0.3s, transform 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,106 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Resistance - My Victims">
+  <section class="victims-container">
+    <h1>☠️ My Victims List</h1>
+    <div id="victimList" class="victim-list">
+      <p>Loading victims...</p>
+    </div>
+    
+    <div class="back-action">
+      <a href="/slave" class="btn">Back to Resistance Hub</a>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const role = localStorage.getItem("userRole");
+      if (role !== "slave") {
+        alert("Access denied. Only Resistance Slaves may view this list.");
+        window.location.href = "/login";
+      }
+
+      const list = document.getElementById("victimList");
+
+      try {
+        const res = await fetch("http://localhost:3000/victims", {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to load victims");
+        const victims = await res.json();
+
+        if (victims.length === 0) {
+          list.innerHTML = "<p>No victims captured yet.</p>";
+          return;
+        }
+
+        list.innerHTML = victims.map(v => `
+          <div class="victim-card">
+            <h3>${v.name}</h3>
+            <p><b>Skills:</b> ${v.skills}</p>
+            <p><b>Last Seen:</b> ${v.lastSeen}</p>
+            <p><b>Status:</b> ${v.status}</p>
+          </div>
+        `).join("");
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = "<p>Error loading victims.</p>";
+      }
+    });
+  </script>
+
+  <style>
+    .victims-container {
+      text-align: center;
+      color: #ffae42;
+      padding: 3rem 1rem;
+      font-family: 'Cinzel', serif;
+    }
+
+    .victim-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .victim-card {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      border-radius: 10px;
+      padding: 1rem;
+      transition: transform 0.3s;
+    }
+
+    .victim-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+    }
+
+    .back-action {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      transition: background 0.3s, transform 0.2s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+    }
+  </style>
+</BaseLayout>

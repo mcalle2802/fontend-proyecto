@@ -2,27 +2,27 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Admin - My Juan Sao">
+<BaseLayout title="Oracle's Chamber - My Juan Sao">
   <section class="admin-container">
     <h1>Oracle's Chamber</h1>
     <p>
       From this sacred place, you can oversee, guide, and alter the fate of every wandering soul.
     </p>
 
-    <div class="admin-actions">
-      <button class="btn">View Reports</button>
-      <button class="btn">Manage Users</button>
-      <button class="btn danger">Reset the Cycle</button>
+    <div class="actions">
+      <a href="/users" class="btn">View All Users</a>
+      <a href="/leaderboard" class="btn">Leaderboard</a>
+      <a href="/settings" class="btn danger">System Settings</a>
     </div>
   </section>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const role = localStorage.getItem("userRole");
-      const allowedRoles = ["master"];
+      const allowedRoles = ["master", "admin"];
 
       if (!allowedRoles.includes(role)) {
-        alert("⚠️ Access denied. Only resistance members may enter this domain.");
+        alert("⚠️ Access denied. Only the Oracle may enter this chamber.");
         window.location.href = "/login";
       }
     });
@@ -37,45 +37,42 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
 
     h1 {
-      font-size: 2.8rem;
-      text-shadow: 0 0 10px rgba(255, 170, 60, 0.7);
-      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 6px rgba(255, 165, 0, 0.7);
     }
 
     p {
-      color: #ffe2b3;
-      margin-bottom: 3rem;
-      max-width: 650px;
-      margin-left: auto;
-      margin-right: auto;
+      color: #ffe0b0;
+      max-width: 600px;
+      margin: 0 auto 3rem;
       line-height: 1.6;
-      font-size: 1.1rem;
     }
 
-    .admin-actions {
+    /* Copiamos el mismo estilo de botones del slave */
+    .actions {
       display: flex;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 2rem;
       flex-wrap: wrap;
     }
 
     .btn {
       background: rgba(255, 165, 0, 0.1);
       border: 1px solid #ffae42;
-      padding: 0.8rem 1.8rem;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
       color: #ffae42;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
       font-family: 'Cinzel', serif;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
     .btn:hover {
       background: rgba(255, 165, 0, 0.3);
       transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+      box-shadow: 0 0 12px rgba(255, 165, 0, 0.3);
     }
 
     .btn.danger {
@@ -85,7 +82,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     .btn.danger:hover {
       background: rgba(255, 60, 60, 0.3);
-      box-shadow: 0 0 18px rgba(255, 60, 60, 0.4);
+      box-shadow: 0 0 12px rgba(255, 60, 60, 0.4);
     }
   </style>
 </BaseLayout>

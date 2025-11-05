@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Developer Tips - My Juan Sao">
+  <section class="tips-container">
+    <h1>Open-access Tips Page</h1>
+    <p>Essential survival tips for developers in the digital realm.</p>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h3>🛡️ Code Defense</h3>
+        <p>Always validate user input and sanitize data to prevent injection attacks.</p>
+      </div>
+      
+      <div class="tip-card">
+        <h3>⚡ Performance</h3>
+        <p>Optimize your code by avoiding unnecessary loops and using efficient algorithms.</p>
+      </div>
+      
+      <div class="tip-card">
+        <h3>🔒 Security</h3>
+        <p>Never commit sensitive data like API keys or passwords to version control.</p>
+      </div>
+      
+      <div class="tip-card">
+        <h3>🧪 Testing</h3>
+        <p>Write tests before implementing features to ensure code reliability.</p>
+      </div>
+    </div>
+
+    <div class="back-action">
+      <a href="/developer" class="btn">Back to Developer Hub</a>
+    </div>
+  </section>
+
+  <style>
+    .tips-container {
+      color: #ffae42;
+      padding: 3rem 2rem;
+      font-family: 'Cinzel', serif;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 6px rgba(255, 165, 0, 0.7);
+    }
+
+    p {
+      text-align: center;
+      color: #ffe0b0;
+      margin-bottom: 3rem;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .tip-card {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+    }
+
+    .tip-card h3 {
+      margin-bottom: 1rem;
+      color: #ffae42;
+    }
+
+    .tip-card p {
+      color: #ffe0b0;
+      text-align: left;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .back-action {
+      text-align: center;
+    }
+
+    .btn {
+      background: rgba(255, 165, 0, 0.1);
+      border: 1px solid #ffae42;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #ffae42;
+      transition: background 0.3s, transform 0.2s;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: rgba(255, 165, 0, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 165, 0, 0.3);
+    }
+  </style>
+</BaseLayout>
