@@ -32,10 +32,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
           },
         });
-
+        
         if (!res.ok) throw new Error("Failed to fetch users");
         const users = await res.json();
-
         list.innerHTML = users.map(u => `
           <div class="user-card">
             <h3>${u.name}</h3>

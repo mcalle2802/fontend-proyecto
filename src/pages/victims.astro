@@ -25,26 +25,38 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       const list = document.getElementById("victimList");
 
       try {
-        const res = await fetch("http://localhost:3000/victims", {
+        const token = localStorage.getItem("token");
+        let slaveId = "";
+        if (token) {          
+          const payloadBase64 = token.split('.')[1];
+          const decodedPayload = JSON.parse(atob(payloadBase64));
+          slaveId = decodedPayload.id;
+        }else{
+          throw new Error("Failed to load victims");
+        }
+       
+        const res = await fetch("http://localhost:3000/victimas", {
           headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
-        if (!res.ok) throw new Error("Failed to load victims");
-        const victims = await res.json();
+        if (!res.ok || !slaveId) throw new Error("Failed to load victims");
+        const rawVictims = await res.json();
+        
+        const victims = rawVictims.filter(v => v.captured_by == slaveId);
 
         if (victims.length === 0) {
           list.innerHTML = "<p>No victims captured yet.</p>";
           return;
         }
 
-        list.innerHTML = victims.map(v => `
+        list.innerHTML = victims.map((v: { name: any; skills: any; last_seen: any; transformation_status: any; }) => `
           <div class="victim-card">
             <h3>${v.name}</h3>
             <p><b>Skills:</b> ${v.skills}</p>
-            <p><b>Last Seen:</b> ${v.lastSeen}</p>
-            <p><b>Status:</b> ${v.status}</p>
+            <p><b>Last Seen:</b> ${new Date(v.last_seen).toDateString()}</p>
+            <p><b>Status:</b> ${v.transformation_status}</p>
           </div>
         `).join("");
       } catch (err) {

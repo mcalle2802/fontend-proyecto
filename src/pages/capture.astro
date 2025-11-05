@@ -10,8 +10,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <form id="captureForm">
       <input type="text" name="name" placeholder="Victim Name" required />
       <input type="text" name="skills" placeholder="Known Skills" required />
-      <input type="text" name="lastSeen" placeholder="Last Seen Location" required />
-      <select name="status" required>
+      <input type="datetime-local" name="last_seen" placeholder="Last Seen" required />
+      <select name="transformation_status" required>
         <option value="">Transformation Status</option>
         <option value="Unchanged">Unchanged</option>
         <option value="Infected - 25%">Infected - 25%</option>
@@ -34,21 +34,32 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         alert("Access denied. Only Resistance Slaves may capture victims.");
         window.location.href = "/login";
       }
-
       const form = document.getElementById("captureForm");
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = Object.fromEntries(new FormData(form).entries());
+        
+        const currentDate = new Date(Date.now()).toISOString();
 
+        const bodyJSON = {
+          ...formData,
+          last_seen: new Date(formData.last_seen).getTime(),
+          skills: formData.skills.split(',').map(s => s.trim()),
+          capture_date: currentDate,
+          created_at: currentDate,
+          updated_at: currentDate,
+        };
+        
         try {
-          const res = await fetch("http://localhost:3000/victims", {
+          const res = await fetch("http://localhost:3000/victimas", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(bodyJSON),
           });
+
 
           if (res.ok) {
             alert("Victim successfully captured!");
